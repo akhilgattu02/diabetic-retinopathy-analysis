@@ -34,7 +34,7 @@ seg_test_dataloader = DataLoader(
     batch_size=3
 )
 
-#Use UNET++ model with timm-efficientnet-b3 encode and imagenet encoder weights
+#Use UNET++ model with timm-efficientnet-b3 encoder and imagenet encoder weights
 model = smp.UnetPlusPlus(
         encoder_name="timm-efficientnet-b3",
         encoder_weights="imagenet",
@@ -79,3 +79,5 @@ with torch.no_grad():
             loss = 0.5 * dice_loss(output, mask) + 0.5 * bce(output, mask)
             total_loss += loss.item()
     print(total_loss/max(1, len(seg_test_dataloader)))
+
+torch.save(model,"/Users/akhilgattu/Desktop/VLM_project/checkpoints/unet_plus_plus_idridd.pth")
