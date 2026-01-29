@@ -5,8 +5,6 @@ import segmentation_models_pytorch as smp
 import torch.nn
 from tqdm import tqdm
 
-#Add lfs
-
 image_paths = "/Users/akhilgattu/Desktop/VLM_project/Data/train/images/"
 mask_paths = "/Users/akhilgattu/Desktop/VLM_project/Data/train/masks/"
 
