@@ -5,6 +5,10 @@ import segmentation_models_pytorch as smp
 import torch.nn
 from tqdm import tqdm
 
+import boto3
+import io
+import torch
+
 image_paths = "/Users/akhilgattu/Desktop/VLM_project/Data/train/images/"
 mask_paths = "/Users/akhilgattu/Desktop/VLM_project/Data/train/masks/"
 
@@ -79,4 +83,32 @@ with torch.no_grad():
             total_loss += loss.item()
     print(total_loss/max(1, len(seg_test_dataloader)))
 
-torch.save(model,"/Users/akhilgattu/Desktop/VLM_project/checkpoints/unet_plus_plus_idridd.pth")
+
+bucket_name = "diabetic-retinopathy-model"
+s3_key = "models/unetplusplus/unet_plus_plus_idridd.pth"
+
+# Move to CPU to avoid device serialization issues
+model = model.to("cpu")
+
+# Create in-memory buffer
+buffer = io.BytesIO()
+
+torch.save({
+    "model_state": model.state_dict(),
+    "optimizer_state": optimizer.state_dict(),
+    "epochs": EPOCHS
+}, buffer)
+
+#Point buffer to start of file
+
+buffer.seek(0) 
+
+s3 = boto3.client("s3")
+
+s3.upload_fileobj(
+    buffer,
+    bucket_name,
+    s3_key
+)
+
+print("Model uploaded directly to S3.")
