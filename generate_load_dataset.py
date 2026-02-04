@@ -39,11 +39,15 @@ class IDRiDDatasetBuilder:
 
 
     #Resize image to (512, 512) resolution
-    def transform(self, img):
-        if len(img.shape) > 2:
-            img = img[..., 0]
-        img = cv2.resize(img, (512, 512))
+    def transform(self, img, is_mask=False):
+
+        if is_mask:
+            img = cv2.resize(img, (512, 512), interpolation=cv2.INTER_NEAREST)
+        else:
+            img = cv2.resize(img, (512, 512), interpolation=cv2.INTER_LINEAR)
+
         return img
+
 
     #Return masks of an image abnormality
     def return_image_abnormality(self, dataset_type, abnormal_path, ab, h, w):
@@ -55,11 +59,11 @@ class IDRiDDatasetBuilder:
 
         if ab in os.listdir(os.path.join(msk_root, abnormal_path)):
             ab = os.path.join(msk_root, abnormal_path+ab)
-            img_ab = cv2.imread(ab, cv2.IMREAD_UNCHANGED)
-            img_ab = self.transform(img_ab)
+            img_ab = cv2.imread(ab, cv2.IMREAD_GRAYSCALE)
+            img_ab = self.transform(img_ab, True)
 
         else:
-            img_ab = np.zeros((h, w))
+            img_ab = np.zeros((h, w), dtype=np.uint8)
         
         return img_ab
 
@@ -92,10 +96,10 @@ class IDRiDDatasetBuilder:
             se = img_name + "_SE.tif"
             od = img_name + "_OD.tif"
 
-            img = cv2.imread(root+fol, cv2.IMREAD_GRAYSCALE)
-            img = self.transform(img)
+            img = cv2.imread(root+fol, cv2.IMREAD_COLOR)
+            img = self.transform(img, False)
 
-            msk = np.zeros((512, 512))
+            msk = np.zeros((512, 512), dtype=np.uint8)
             h, w = 512, 512
             
 
@@ -127,24 +131,33 @@ class SegDataSet(Dataset):
         self.mask_paths = mask_paths
         self.image_paths = [self.image_paths+image_path for image_path in sorted(os.listdir(self.image_paths))]
         self.mask_paths = [self.mask_paths+mask_path for mask_path in sorted(os.listdir(self.mask_paths))]
-
+        self.aug = A.Compose([
+            A.HorizontalFlip(p=0.5),
+            A.VerticalFlip(p=0.5),
+            A.RandomRotate90(p=0.5),
+            A.RandomBrightnessContrast(p=0.3),
+        ])
 
     def __len__(self):
         return len(self.image_paths)
     
     def __getitem__(self, idx):
-        img_path = self.image_paths[idx]
-        mask_path = self.mask_paths[idx]
-
-        image = cv2.imread(img_path)
+        image = cv2.imread(self.image_paths[idx])
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        image = torch.from_numpy(image).permute(2, 0, 1).float() / 255.0
 
-        mask = cv2.imread(mask_path, cv2.IMREAD_UNCHANGED)
-        mask = torch.from_numpy(mask)
-        
-        multilabel_mask = torch.zeros([5, 512, 512], dtype=torch.float32)
-        for cls_id in range(1, 6):
-            multilabel_mask[cls_id - 1] = (mask == cls_id)
+        mask = cv2.imread(self.mask_paths[idx], cv2.IMREAD_UNCHANGED)
 
-        return image, multilabel_mask
+        augmented = self.aug(image=image, mask=mask)
+        image, mask = augmented["image"], augmented["mask"]
+
+        image = image.astype(np.float32) / 255.0
+
+        # ImageNet normalization
+        mean = np.array([0.485, 0.456, 0.406])
+        std  = np.array([0.229, 0.224, 0.225])
+        image = (image - mean) / std
+
+        image = torch.from_numpy(image).permute(2,0,1).float()
+        mask = torch.from_numpy(mask).long()
+
+        return image, mask

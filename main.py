@@ -8,6 +8,11 @@ from tqdm import tqdm
 import boto3
 import io
 import torch
+import torch.nn.utils as utils
+from torch.utils.tensorboard import SummaryWriter
+
+writer = SummaryWriter("runs/idridd_experiment")
+
 
 image_paths = "/Users/akhilgattu/Desktop/VLM_project/Data/train/images/"
 mask_paths = "/Users/akhilgattu/Desktop/VLM_project/Data/train/masks/"
@@ -42,7 +47,7 @@ model = smp.UnetPlusPlus(
         encoder_name="timm-efficientnet-b3",
         encoder_weights="imagenet",
         in_channels=3,
-        classes=5,
+        classes=6,
         activation=None,
 )
 
@@ -50,13 +55,28 @@ model = smp.UnetPlusPlus(
 DiceLoss = smp.losses.DiceLoss
 FocalLoss = smp.losses.FocalLoss
 
-dice_loss = DiceLoss('multilabel', from_logits=True)
-focal_loss = FocalLoss('multilabel', gamma=1.5)
-bce = torch.nn.BCEWithLogitsLoss()
+dice_loss = smp.losses.DiceLoss(
+    mode='multiclass',
+    from_logits=True
+)
+
+weights = torch.tensor([
+    0.05,  # background
+    4.0,   # MA (tiny lesions)
+    3.0,   # HE
+    2.5,   # EX
+    2.0,   # SE
+    1.0    # OD
+], dtype=torch.float32).to(DEVICE)
+
+ce_loss = torch.nn.CrossEntropyLoss(weight=weights)
+
 
 optimizer = torch.optim.AdamW(model.parameters())
 
-EPOCHS = 10
+global_step = 0
+
+EPOCHS = 80
 model = model.to(DEVICE)
 for ep in range(EPOCHS):
     model.train()
@@ -66,22 +86,33 @@ for ep in range(EPOCHS):
         mask = mask.to(DEVICE)
         output = model(img)
         optimizer.zero_grad()
-        loss = 0.5 * dice_loss(output, mask) + 0.5 * bce(output, mask)
+        loss = 0.5 * dice_loss(output, mask) + 0.5 * ce_loss(output, mask)
         total_loss += loss.item()
         loss.backward()
         optimizer.step()
+
+        writer.add_scalar("Train/Loss", loss.item(), global_step)
+
+        global_step += 1
+        total_loss += loss.item()
     print(total_loss/max(1, len(seg_dataloader)))
+    writer.add_scalar("Train/EpochLoss",
+                      total_loss/len(seg_dataloader),
+                      ep)
 
 total_loss = 0
 model = model.to('mps')
+model.eval()
 with torch.no_grad():
     for img, mask in tqdm(seg_test_dataloader):
             img = img.to(DEVICE)
             mask = mask.to(DEVICE)
             output = model(img)
-            loss = 0.5 * dice_loss(output, mask) + 0.5 * bce(output, mask)
+            loss = 0.5 * dice_loss(output, mask) + 0.5 * ce_loss(output, mask)
             total_loss += loss.item()
     print(total_loss/max(1, len(seg_test_dataloader)))
+
+writer.add_scalar("Val/Loss", total_loss/len(seg_test_dataloader), ep)
 
 
 bucket_name = "diabetic-retinopathy-model"
@@ -112,3 +143,6 @@ s3.upload_fileobj(
 )
 
 print("Model uploaded directly to S3.")
+'''
+torch.save(model.state_dict(), "unet_plus_plus_idridd.pth")
+'''
