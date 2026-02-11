@@ -25,7 +25,7 @@ visualize:
 commit:
 	make clean
 	git add .
-	git commit -m "Update makefile"
+	git commit 
 	git push origin 
 
 test:
