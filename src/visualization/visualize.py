@@ -9,8 +9,8 @@ import matplotlib.patches as mpatches
 # -----------------------------
 # CONFIG
 # -----------------------------
-IMAGE_PATH = "/Users/akhilgattu/Desktop/VLM_project/Data/test/images/IDRiD_55.jpg"
-MODEL_PATH = "unet_plus_plus_idridd.pth"
+IMAGE_PATH = "/Users/akhilgattu/Desktop/diabetic-retinopathy-analysis/data/processed/test/images/IDRiD_55.jpg"
+MODEL_PATH = "/Users/akhilgattu/Desktop/diabetic-retinopathy-analysis/checkpoints/unet_plus_plus_idridd.pth"
 DEVICE = "mps" if torch.mps.is_available() else "cpu"
 
 # -----------------------------

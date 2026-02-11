@@ -19,10 +19,13 @@ train:
 run:
 	$(PYTHON) main.py
 
+visualize:
+	$(PYTHON) src/visualization/visualize.py
+
 commit:
 	make clean
 	git add .
-	git commit 
+	git commit -m "Update makefile"
 	git push origin 
 
 test:
