@@ -9,7 +9,7 @@
 3) Soft exudates
 4) Microaneurysms 
 5) Haemorrhages
-6) Background (Weight = 0.03, Extremely downweighted)
+6) Background (Weight = 0.05, Extremely downweighted)
 
 
 ## Models tried
@@ -20,7 +20,7 @@
 - Using UNet++ model with timm-efficientnet-b3 encoder and imagenet weights
 for segmenting fundus images into optic disc and multiple abnormalities.
 - Hyperparameters:
-  1) No of epochs: 40
+  1) No of epochs: 10
   2) Learning rate: 3e-4
   3) Batch size: 4
   4) Image size: 512
