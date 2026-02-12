@@ -28,6 +28,9 @@ commit:
 	git commit 
 	git push origin 
 
+clean_runs:
+	rm -rf runs/idridd_experiment/*
+
 test:
 	pytest tests/
 

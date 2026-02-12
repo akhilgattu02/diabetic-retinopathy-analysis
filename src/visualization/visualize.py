@@ -102,6 +102,7 @@ contours, _ = cv2.findContours(
 )
 
 cv2.drawContours(overlay, contours, -1, (255,255,255), 1)
+cv2.imwrite("overlay.png", cv2.cvtColor(overlay, cv2.COLOR_RGB2BGR))
 # -----------------------------
 # DISPLAY
 # -----------------------------

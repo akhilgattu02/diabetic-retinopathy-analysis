@@ -10,7 +10,7 @@ MODEL = model.to(DEVICE)
 def run_training_pipeline():
     DEVICE = 'mps' if torch.mps.is_available() else 'cpu'
     optimizer = torch.optim.AdamW(MODEL.parameters())
-    EPOCHS = 10
+    EPOCHS = 25
     trained_model = train_model(MODEL, seg_dataloader, seg_test_dataloader, optimizer, EPOCHS, DEVICE)
     #save_model_to_s3(trained_model, "unet_plus_plus_effnet_b3.pth")
     save_model_locally(trained_model)
