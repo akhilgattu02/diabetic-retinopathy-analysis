@@ -56,6 +56,7 @@ pred_mask = torch.argmax(output, dim=1).squeeze().cpu().numpy()
 print("Predicted unique classes:", np.unique(pred_mask))
 print("Lesion pixels:", np.sum(pred_mask > 0))
 
+
 # -----------------------------
 # COLOR MAP
 # -----------------------------
@@ -100,6 +101,9 @@ contours, _ = cv2.findContours(
     cv2.RETR_TREE,
     cv2.CHAIN_APPROX_SIMPLE
 )
+
+
+
 
 cv2.drawContours(overlay, contours, -1, (255,255,255), 1)
 cv2.imwrite("overlay.png", cv2.cvtColor(overlay, cv2.COLOR_RGB2BGR))
