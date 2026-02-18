@@ -12,7 +12,7 @@ import torch
 import torch.nn.utils as utils
 from torch.utils.tensorboard import SummaryWriter
 
-writer = SummaryWriter("/Users/akhilgattu/Desktop/diabetic-retinopathy-analysis/runs/idridd_experiment")
+writer = SummaryWriter("/Users/akhilgattu/Desktop/diabetic-retinopathy-analysis/runs/idridd_experiment/logs")
 
 def train_model(model, seg_dataloader, seg_test_dataloader, optimizer, EPOCHS, DEVICE):
     global_step = 0
