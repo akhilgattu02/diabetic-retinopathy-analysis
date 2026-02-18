@@ -102,28 +102,57 @@ contours, _ = cv2.findContours(
     cv2.CHAIN_APPROX_SIMPLE
 )
 
-
+def load_mask(path):
+    m = cv2.imread(path, cv2.IMREAD_UNCHANGED)
+    m = cv2.resize(m, (512,512), interpolation=cv2.INTER_NEAREST)
+    return m
 
 
 cv2.drawContours(overlay, contours, -1, (255,255,255), 1)
-cv2.imwrite("overlay.png", cv2.cvtColor(overlay, cv2.COLOR_RGB2BGR))
+
+ma = load_mask("/Users/akhilgattu/Desktop/diabetic-retinopathy-analysis/data/raw/A. Segmentation/2. All Segmentation Groundtruths/b. Testing Set/1. Microaneurysms/IDRiD_55_MA.tif")
+he = load_mask("/Users/akhilgattu/Desktop/diabetic-retinopathy-analysis/data/raw/A. Segmentation/2. All Segmentation Groundtruths/b. Testing Set/2. Haemorrhages/IDRiD_55_HE.tif")
+ex = load_mask("/Users/akhilgattu/Desktop/diabetic-retinopathy-analysis/data/raw/A. Segmentation/2. All Segmentation Groundtruths/b. Testing Set/3. Hard Exudates/IDRiD_55_EX.tif")
+se = load_mask("/Users/akhilgattu/Desktop/diabetic-retinopathy-analysis/data/raw/A. Segmentation/2. All Segmentation Groundtruths/b. Testing Set/4. Soft Exudates/IDRiD_55_SE.tif")
+od = load_mask("/Users/akhilgattu/Desktop/diabetic-retinopathy-analysis/data/raw/A. Segmentation/2. All Segmentation Groundtruths/b. Testing Set/5. Optic Disc/IDRiD_55_OD.tif")
+
+# Ensure binary masks
+def get_contours(mask):
+    #_, th = cv2.threshold(mask, 127, 255, cv2.THRESH_BINARY)
+    lesion_pixels = mask > 0
+    contours, _ = cv2.findContours(lesion_pixels.astype(np.uint8), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    return contours
+
+# Get contours
+ma_c = get_contours(ma)
+he_c = get_contours(he)
+ex_c = get_contours(ex)
+se_c = get_contours(se)
+od_c = get_contours(od)
+
+# Draw contours (BGR colors)
+cv2.drawContours(display_img, ma_c, -1, (255,0,0), 2)
+cv2.drawContours(display_img, he_c, -1, (0,255,0), 2)
+cv2.drawContours(display_img, ex_c, -1, (0,0,255), 2)
+cv2.drawContours(display_img, se_c, -1, (255,255,0), 2)
+cv2.drawContours(display_img, od_c, -1, (255,0,255), 2)
+
 # -----------------------------
 # DISPLAY
 # -----------------------------
 plt.figure(figsize=(12,6))
 
 
-plt.figure(figsize=(12,6))
-
-plt.subplot(1,2,1)
+plt.subplot(1,3,1)
 plt.title("Original")
 plt.imshow(display_img)
 plt.axis("off")
 
-plt.subplot(1,2,2)
+plt.subplot(1,3,2)
 plt.title("Segmentation Overlay")
 plt.imshow(overlay)
 plt.axis("off")
+
 
 # Create legend
 patches = []
@@ -140,5 +169,6 @@ plt.legend(
 )
 
 plt.tight_layout()
+plt.savefig("overlay.png", dpi=300, bbox_inches="tight")
 plt.show()
 
