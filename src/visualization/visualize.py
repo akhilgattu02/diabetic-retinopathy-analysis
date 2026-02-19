@@ -143,12 +143,12 @@ cv2.drawContours(display_img, od_c, -1, (255,0,255), 2)
 plt.figure(figsize=(12,6))
 
 
-plt.subplot(1,3,1)
+plt.subplot(1,2,1)
 plt.title("Original")
 plt.imshow(display_img)
 plt.axis("off")
 
-plt.subplot(1,3,2)
+plt.subplot(1,2,2)
 plt.title("Segmentation Overlay")
 plt.imshow(overlay)
 plt.axis("off")

@@ -15,21 +15,26 @@
 ## Models tried
 1) Segmentation (UNet++) + Gemma
 
-## Architecture
+## Proposed architecture
 ### Segmentation + Gemma
+#### Current architecture
 - Using UNet++ model with timm-efficientnet-b3 encoder and imagenet weights
 for segmenting fundus images into optic disc and multiple abnormalities.
 - Hyperparameters:
-  1) No of epochs: 40
+  1) No of epochs: 25
   2) Learning rate: 3e-4
-  3) Batch size: 4
+  3) Batch size: 3
   4) Image size: 512
   5) No. of output classes: 6
-- Loss: 0.5 * Focal loss + 0.5 * Dice loss
+- Loss: 0.5 * dice_loss + 0.5 * ce_loss
 - Optimizer: Adam optimizer with weight decay 1e-4
 
 
 ## Metrics
-- Validation dice score: 0.5137
+- Validation total loss (0.5 * dice_loss + 0.5 * ce_loss): 0.29
+- Training loss curve:
+![Training loss curve](training_loss_curve.png)
 
 ## Conclusion
+### Stage-1 (Application of segmentation model to detect )
+![Overlay Image](overlay.png)
