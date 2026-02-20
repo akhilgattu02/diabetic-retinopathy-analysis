@@ -35,5 +35,5 @@ for segmenting fundus images into optic disc and multiple abnormalities.
 ![Training loss curve](training_loss_curve.png)
 
 ## Conclusion
-### Stage-1 (Application of segmentation model to detect )
+### Stage-1 (Application of segmentation model to detect and mark abnormalities)
 ![Overlay Image](overlay.png)
