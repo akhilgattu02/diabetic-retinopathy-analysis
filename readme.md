@@ -29,7 +29,6 @@ for segmenting fundus images into optic disc and multiple abnormalities.
 - Loss: 0.5 * dice_loss + 0.5 * ce_loss
 - Optimizer: Adam optimizer with weight decay 1e-4
 
-
 ## Metrics
 - Validation total loss (0.5 * dice_loss + 0.5 * ce_loss): 0.29
 - Training loss curve:
