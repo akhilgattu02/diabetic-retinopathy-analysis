@@ -37,3 +37,5 @@ for segmenting fundus images into optic disc and multiple abnormalities.
 ## Conclusion
 ### Stage-1 (Application of segmentation model to detect and mark abnormalities)
 ![Overlay Image](overlay.png)
+
+### Stage-2 (Using VLM model to generate summary report of fundus abnormalities)
