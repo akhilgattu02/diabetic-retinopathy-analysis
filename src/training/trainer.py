@@ -1,4 +1,4 @@
-from src.training.losses import dice_loss, ce_loss
+from src.training.losses import dice_loss, ce_loss, multiclass_iou
 from src.models.unet_plus_plus import model
 
 import torch
@@ -16,9 +16,12 @@ writer = SummaryWriter("/Users/akhilgattu/Desktop/diabetic-retinopathy-analysis/
 
 def train_model(model, seg_dataloader, seg_test_dataloader, optimizer, EPOCHS, DEVICE):
     global_step = 0
+    
     for ep in range(EPOCHS):
         model.train()
         total_loss = 0
+        total_iou = 0
+
         for img, mask in tqdm(seg_dataloader, desc=f"Train {ep}/{EPOCHS}"):
             img = img.to(DEVICE)
             mask = mask.to(DEVICE)
@@ -29,7 +32,12 @@ def train_model(model, seg_dataloader, seg_test_dataloader, optimizer, EPOCHS, D
             loss.backward()
             optimizer.step()
 
+            batch_iou = multiclass_iou(output, mask, 6)
+            total_iou += batch_iou.item()
+
             writer.add_scalar("Train/Loss", loss.item(), global_step)
+            writer.add_scalar("Train/DiceLoss", dice_loss(output, mask).item(), global_step)
+            writer.add_scalar("Train/IoU", batch_iou.item(), global_step)
 
             global_step += 1
             total_loss += loss.item()

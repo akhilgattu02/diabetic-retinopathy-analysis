@@ -11,6 +11,25 @@ dice_loss = smp.losses.DiceLoss(
     from_logits=True
 )
 
+def multiclass_iou(preds, targets, num_classes, eps=1e-6):
+    preds = torch.argmax(preds, dim=1)
+
+    ious = []
+
+    for cls in range(num_classes):
+        pred_inds = (preds == cls)
+        target_inds = (targets == cls)
+
+        intersection = (pred_inds & target_inds).float().sum()
+        union = pred_inds.float().sum() + target_inds.float().sum() - intersection
+
+        if union == 0:
+            continue
+
+        ious.append((intersection + eps) / (union + eps))
+
+    return torch.mean(torch.stack(ious))
+
 weights = torch.tensor([
     0.05,  # background
     4.0,   # MA (tiny lesions)
