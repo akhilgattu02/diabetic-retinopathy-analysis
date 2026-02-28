@@ -22,7 +22,7 @@ messages = [
             {"type": "image"},
             {
                 "type": "text",
-                "text": "Provide a detailed structured report of this retinal image and assess diabetic retinopathy severity based on segmented image on right and the labels."
+                "text": "Provide a detailed structured report of the segmented retinal image on the right and assess diabetic retinopathy severity based on segmented image on right and the labels."
             }
         ],
     }
