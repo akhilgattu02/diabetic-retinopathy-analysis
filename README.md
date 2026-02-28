@@ -16,7 +16,7 @@
 1) Segmentation (UNet++) + Gemma
 
 ## Proposed architecture
-### Segmentation + Gemma
+### Segmentation + Qwen
 #### Current architecture
 - Using UNet++ model with timm-efficientnet-b3 encoder and imagenet weights
 for segmenting fundus images into optic disc and multiple abnormalities.
@@ -41,3 +41,8 @@ for segmenting fundus images into optic disc and multiple abnormalities.
 ![Overlay Image](overlay.png)
 
 ### Stage-2 (Using VLM model to generate summary report of fundus abnormalities)
+Uses Qwen2-VL-2B-Instruct to generate a structured, patient-facing summary 
+based on the segmented retinal image output from the Stage-1 segmentation model. 
+
+The model describes detected fundus abnormalities and provides a model-estimated 
+diabetic retinopathy severity level.
