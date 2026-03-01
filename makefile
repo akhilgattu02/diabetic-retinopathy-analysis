@@ -23,7 +23,6 @@ visualize:
 	$(PYTHON) -m src.visualization.visualize
 
 commit:
-	make clean
 	git add .
 	git commit 
 	git push origin 

@@ -13,7 +13,7 @@
 
 
 ## Models tried
-1) Segmentation (UNet++) + Gemma
+1) Segmentation (UNet++) + Qwen2-VL-2B-Instruct
 
 ## Proposed architecture
 ### Segmentation + Qwen
