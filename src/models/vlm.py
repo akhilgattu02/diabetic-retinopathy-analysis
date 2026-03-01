@@ -40,13 +40,15 @@ inputs = processor(
     return_tensors="pt"
 ).to(device)
 
-with torch.no_grad():
-    output = model.generate(
-        **inputs,
-        max_new_tokens=600,
-        do_sample=False,
-        temperature=0.2,
-        repetition_penalty=1.2
-    )
+def generate_report():
+    with torch.no_grad():
+        output = model.generate(
+            **inputs,
+            max_new_tokens=600,
+            do_sample=False,
+            temperature=0.2,
+            repetition_penalty=1.2
+        )
 
-print(processor.decode(output[0], skip_special_tokens=True))
+    with open("patient_retinal_report.txt", "w") as f:
+        f.write(processor.decode(output[0], skip_special_tokens=True))

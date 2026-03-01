@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import segmentation_models_pytorch as smp
 import matplotlib.patches as mpatches
-
+from src.models.vlm import generate_report
 
 # -----------------------------
 # CONFIG
@@ -170,5 +170,6 @@ plt.legend(
 
 plt.tight_layout()
 plt.savefig("overlay.png", dpi=300, bbox_inches="tight")
+generate_report()
 plt.show()
 

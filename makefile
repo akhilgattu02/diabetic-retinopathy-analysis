@@ -20,7 +20,7 @@ run:
 	$(PYTHON) main.py
 
 visualize:
-	$(PYTHON) src/visualization/visualize.py
+	$(PYTHON) -m src.visualization.visualize
 
 commit:
 	make clean
