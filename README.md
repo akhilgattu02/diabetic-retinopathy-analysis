@@ -48,7 +48,7 @@ The model describes detected fundus abnormalities and provides a model-estimated
 diabetic retinopathy severity level.
 
 #### Sample output
-ser
+Instruction prompt:
 Provide a detailed structured report of the segmented retinal image on the right, ignore the original image on left and assess diabetic retinopathy severity based on segmented image on right and the labels.
 assistant
 The segmentation overlay for the retinal image in Figure 1 shows different types of abnormalities that can be used to assess diabetic retinopathy (DR) severity.
