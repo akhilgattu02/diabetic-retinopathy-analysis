@@ -46,3 +46,45 @@ based on the segmented retinal image output from the Stage-1 segmentation model.
 
 The model describes detected fundus abnormalities and provides a model-estimated 
 diabetic retinopathy severity level.
+
+#### Sample output
+ser
+Provide a detailed structured report of the segmented retinal image on the right, ignore the original image on left and assess diabetic retinopathy severity based on segmented image on right and the labels.
+assistant
+The segmentation overlay for the retinal image in Figure 1 shows different types of abnormalities that can be used to assess diabetic retinopathy (DR) severity.
+
+##### Original Image:
+- **Background**: The dark area at the bottom is likely the background or non-retina tissue.
+- **Haemorrhages**: These appear as bright red areas scattered throughout the retina.
+- **Hard Exudates**: These are darker green patches with irregular shapes.
+- **Soft Exudates**: These are lighter green patches with more defined borders compared to hard exudates.
+- **Optic Disc**: This appears as a pinkish-red oval shape located near the top center of the image.
+
+##### Segmentation Overlay:
+- **Background**: The dark area remains unchanged from the original image.
+- **Haemorrhages**: The haemorrhage regions remain visible but may have slightly changed their appearance due to the segmentation process.
+- **Hard Exudates**: The hard exudate regions show some changes; they now appear less distinct and possibly merged into larger clusters.
+- **Soft Exudates**: The soft exudate regions also seem to merge together, forming larger clusters.
+- **Optic Disc**: The optic disc region retains its position and coloration similar to the original image.
+
+##### Assessment Based on Segmented Image:
+
+Based on this segmentation overlay, we can observe several key features related to DR severity:
+
+###### Haemorrhages:
+- **Redness**: Presence of significant reddening suggests advanced stages of DR where hemorrhagic macular edema has developed.
+- **Distribution**: The distribution pattern indicates whether there's an extensive involvement across multiple quadrants or if it’s localized within one quadrant.
+
+###### Hard Exudates:
+- **Size and Shape**: Larger and denser clusters suggest severe DR where exudative lesions have formed over time.
+- **Uniformity**: Uniform size and shape indicate consistent progression without regression phases.
+
+###### Soft Exudates:
+- **Density and Distribution**: Smaller and more dispersed clusters suggest moderate DR where new exudations are developing slowly.
+- **Pattern**: Randomly distributed patterns might indicate early-stage DR before the development of large confluent masses.
+
+###### Optic Disc:
+- **Color and Position**: Normal-looking optic discs imply no immediate signs of DR affecting vision.
+- **Shape and Size**: Slightly smaller than normal could indicate mild DR affecting peripheral vision.
+
+In summary, while the overall structure of the image remains largely intact after segmentation, the presence of increased density and uniformity in certain areas like the optic disc and the presence of larger clusters of exudates suggest higher levels of DR severity. However, further analysis would require clinical correlation and additional diagnostic tools such as OCT scans or fluorescein angiography.
