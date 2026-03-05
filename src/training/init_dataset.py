@@ -24,7 +24,7 @@ seg_dataloader = DataLoader(
     batch_size=3
 )
 
-seg_test_dataset = SegDataSet(image_paths, mask_paths)
+seg_test_dataset = SegDataSet(image_test_paths, mask_test_paths)
 seg_test_dataloader = DataLoader(
     dataset=seg_test_dataset,
     batch_size=3
