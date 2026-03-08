@@ -1,4 +1,4 @@
-from src.training.losses import dice_loss, ce_loss, multiclass_iou
+from src.training.losses import dice_loss, jaccard_loss, ce_loss, multiclass_iou
 from src.models.unet_plus_plus import model
 
 import torch
@@ -27,7 +27,8 @@ def train_model(model, seg_dataloader, seg_test_dataloader, optimizer, EPOCHS, D
             mask = mask.to(DEVICE)
             output = model(img)
             optimizer.zero_grad()
-            loss = 0.5 * dice_loss(output, mask) + 0.5 * ce_loss(output, mask)
+            # Combined loss: Jaccard (IoU) + Dice + CrossEntropy
+            loss = 0.4 * jaccard_loss(output, mask) + 0.35 * dice_loss(output, mask) + 0.25 * ce_loss(output, mask)
             total_loss += loss.item()
             loss.backward()
             optimizer.step()
@@ -36,6 +37,7 @@ def train_model(model, seg_dataloader, seg_test_dataloader, optimizer, EPOCHS, D
             total_iou += batch_iou.item()
 
             writer.add_scalar("Train/Loss", loss.item(), global_step)
+            writer.add_scalar("Train/JaccardLoss", jaccard_loss(output, mask).item(), global_step)
             writer.add_scalar("Train/DiceLoss", dice_loss(output, mask).item(), global_step)
             writer.add_scalar("Train/IoU", batch_iou.item(), global_step)
 
@@ -57,7 +59,7 @@ def evaluate_model(model, seg_test_dataloader, DEVICE, ep):
                 img = img.to(DEVICE)
                 mask = mask.to(DEVICE)
                 output = model(img)
-                loss = 0.5 * dice_loss(output, mask) + 0.5 * ce_loss(output, mask)
+                loss = 0.4 * jaccard_loss(output, mask) + 0.35 * dice_loss(output, mask) + 0.25 * ce_loss(output, mask)
                 total_loss += loss.item()
         print(total_loss/max(1, len(seg_test_dataloader)))
 

@@ -11,6 +11,12 @@ dice_loss = smp.losses.DiceLoss(
     from_logits=True
 )
 
+# Jaccard Loss (IoU-based loss)
+jaccard_loss = smp.losses.JaccardLoss(
+    mode='multiclass',
+    from_logits=True
+)
+
 def multiclass_iou(preds, targets, num_classes, eps=1e-6):
     preds = torch.argmax(preds, dim=1)
 
