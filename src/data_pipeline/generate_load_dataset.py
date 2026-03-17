@@ -131,11 +131,21 @@ class SegDataSet(Dataset):
         self.mask_paths = mask_paths
         self.image_paths = [self.image_paths+image_path for image_path in sorted(os.listdir(self.image_paths))]
         self.mask_paths = [self.mask_paths+mask_path for mask_path in sorted(os.listdir(self.mask_paths))]
+        '''
         self.aug = A.Compose([
             A.HorizontalFlip(p=0.5),
             A.VerticalFlip(p=0.5),
             A.RandomRotate90(p=0.5),
             A.RandomBrightnessContrast(p=0.3),
+        ])
+        '''
+        self.aug = A.Compose([
+            A.HorizontalFlip(),
+            A.VerticalFlip(),
+            A.RandomRotate90(),
+            A.RandomBrightnessContrast(),
+            A.ElasticTransform(),
+            A.ShiftScaleRotate(),
         ])
 
     def __len__(self):

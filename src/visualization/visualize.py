@@ -17,11 +17,11 @@ DEVICE = "mps" if torch.mps.is_available() else "cpu"
 # MODEL
 # -----------------------------
 model = smp.UnetPlusPlus(
-    encoder_name="timm-efficientnet-b3",
+    encoder_name="timm-efficientnet-b4",
     encoder_weights="imagenet",
     in_channels=3,
     classes=6,
-    activation=None,
+    decoder_attention_type="scse",
 ).to(DEVICE)
 
 state_dict = torch.load(MODEL_PATH, map_location=DEVICE)
