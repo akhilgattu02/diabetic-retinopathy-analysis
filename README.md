@@ -1,7 +1,7 @@
 # Diabetic retinopathy analysis  
 
 ## Objective
-- To diagnose diabetic retinopathy from fundus images and generate a structured report using VLM's for patients that shows the severity of disease and current eye health. 
+Diagnose diabetic retinopathy from fundus images and generate a structured report using Vision Language Models for patients, showing the severity of disease and current eye health. 
 
 ## Output classes and abnormalities
 1) Optic disc 
