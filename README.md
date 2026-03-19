@@ -1,7 +1,7 @@
-# VLM Project to generate patient report for diabetic retinopathy 
+# Diabetic retinopathy analysis  
 
 ## Objective
-- To diagnose diabetic retinopathy from fundus images and generate a report using VLM's for patients that shows the severity of disease and current eye health. 
+- To diagnose diabetic retinopathy from fundus images and generate a structured report using VLM's for patients that shows the severity of disease and current eye health. 
 
 ## Output classes and abnormalities
 1) Optic disc 
