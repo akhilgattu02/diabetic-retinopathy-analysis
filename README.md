@@ -11,6 +11,7 @@
 5) Haemorrhages
 6) Background (Weight = 0.03, Extremely downweighted)
 
+## Preprocessing
 
 ## Models tried
 1) Segmentation (UNet++) + Qwen2-VL-2B-Instruct
