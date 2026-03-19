@@ -12,6 +12,32 @@
 6) Background (Weight = 0.03, Extremely downweighted)
 
 ## Preprocessing
+The IDRiD dataset is preprocessed into a single multi-class mask per image and resized to `512×512` before training.
+### Raw data
+The raw data is in data/raw/ folder in the IDRiD format, we need to convert to a format that can be read by PyTorch's data preprocessing modules.
+### What it does
+ - Combines the per-abnormality masks (e.g., `*_MA.tif`, `*_HE.tif`, etc.) into a single mask where each pixel value is an integer label:
+   - `0` = background
+   - `1` = MA (Microaneurysms)
+   - `2` = HE (Haemorrhages)
+   - `3` = EX (Hard Exudates)
+   - `4` = SE (Soft Exudates)
+   - `5` = OD (Optic Disc)
+ - Resizes all images and masks to **512×512**
+ - Writes processed data to:
+   - `data/processed/train/images/`, `data/processed/train/masks/`
+   - `data/processed/test/images/`, `data/processed/test/masks/`
+
+### Running preprocessing
+Preprocessing runs automatically when training starts (it is triggered by `src/training/init_dataset.py`).
+
+To run it explicitly:
+```bash
+python -c "from src.training.init_dataset import dataset_builder_train; dataset_builder_train.create_dataset('train')"
+python -c "from src.training.init_dataset import dataset_builder_test; dataset_builder_test.create_dataset('test')"
+```
+
+> Tip: Delete `data/processed/` to force regeneration of processed images/masks.
 
 ## Models tried
 1) Segmentation (UNet++) + Qwen2-VL-2B-Instruct
