@@ -63,28 +63,28 @@ for segmenting fundus images into optic disc and multiple abnormalities.
 - Training loss curve:
 ![Training loss curve](training_loss_curve.png)
 
-### Model Performance Analysis
+## Model Performance Analysis
 
-<table>
-  <tr>
-    <th>Aspect</th>
-    <th>Strengths</th>
-    <th>Weaknesses</th>
+<table style="border-collapse: collapse; width: 100%; border: 1px solid black;">
+  <tr style="border: 1px solid black;">
+    <th style="border: 1px solid black; padding: 8px;">Aspect</th>
+    <th style="border: 1px solid black; padding: 8px;">Strengths</th>
+    <th style="border: 1px solid black; padding: 8px;">Weaknesses</th>
   </tr>
-  <tr>
-    <td><strong>Class Detection</strong></td>
-    <td>Predicts all 6 classes (background + 5 abnormalities)</td>
-    <td>May miss tiny microaneurysms or over-segment exudates</td>
+  <tr style="border: 1px solid black;">
+    <td style="border: 1px solid black; padding: 8px;"><strong>Class Detection</strong></td>
+    <td style="border: 1px solid black; padding: 8px;">Predicts all 6 classes (background + 5 abnormalities)</td>
+    <td style="border: 1px solid black; padding: 8px;">May miss tiny microaneurysms or over-segment exudates</td>
   </tr>
-  <tr>
-    <td><strong>Lesion Coverage</strong></td>
-    <td>12,236 lesion pixels (~4.7% of image) - balanced segmentation</td>
-    <td>IoU of 0.40-0.44 could be higher for clinical use (aim for 0.6+)</td>
+  <tr style="border: 1px solid black;">
+    <td style="border: 1px solid black; padding: 8px;"><strong>Lesion Coverage</strong></td>
+    <td style="border: 1px solid black; padding: 8px;">12,236 lesion pixels (~4.7% of image) - balanced segmentation</td>
+    <td style="border: 1px solid black; padding: 8px;">IoU of 0.40-0.44 could be higher for clinical use (aim for 0.6+)</td>
   </tr>
-  <tr>
-    <td><strong>Visualization</strong></td>
-    <td>Semi-transparent color-coded overlay with white contours</td>
-    <td>Microaneurysms get lower IoU due to small size</td>
+  <tr style="border: 1px solid black;">
+    <td style="border: 1px solid black; padding: 8px;"><strong>Visualization</strong></td>
+    <td style="border: 1px solid black; padding: 8px;">Semi-transparent color-coded overlay with white contours</td>
+    <td style="border: 1px solid black; padding: 8px;">Microaneurysms get lower IoU due to small size</td>
   </tr>
 </table>
 
