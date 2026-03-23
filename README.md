@@ -63,6 +63,31 @@ for segmenting fundus images into optic disc and multiple abnormalities.
 - Training loss curve:
 ![Training loss curve](training_loss_curve.png)
 
+### Model Performance Analysis
+
+<table>
+  <tr>
+    <th>Aspect</th>
+    <th>Strengths</th>
+    <th>Weaknesses</th>
+  </tr>
+  <tr>
+    <td><strong>Class Detection</strong></td>
+    <td>Predicts all 6 classes (background + 5 abnormalities)</td>
+    <td>May miss tiny microaneurysms or over-segment exudates</td>
+  </tr>
+  <tr>
+    <td><strong>Lesion Coverage</strong></td>
+    <td>12,236 lesion pixels (~4.7% of image) - balanced segmentation</td>
+    <td>IoU of 0.40-0.44 could be higher for clinical use (aim for 0.6+)</td>
+  </tr>
+  <tr>
+    <td><strong>Visualization</strong></td>
+    <td>Semi-transparent color-coded overlay with white contours</td>
+    <td>Microaneurysms get lower IoU due to small size</td>
+  </tr>
+</table>
+
 ## Setup
 On command line:
 - Execute 'make train' to start training the model.
